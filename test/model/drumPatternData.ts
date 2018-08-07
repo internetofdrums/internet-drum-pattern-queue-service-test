@@ -1,3 +1,3 @@
-export interface DrumPatternData {
-    pattern: string
+export interface IDrumPatternData {
+    pattern: string;
 }

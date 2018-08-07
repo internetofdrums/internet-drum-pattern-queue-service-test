@@ -9,8 +9,12 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "outDir": "build"
   },
+  "include": [
+    "test/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

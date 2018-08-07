@@ -1,3 +1,3 @@
-export interface UniversallyUnique {
-    id: string
+export interface IUniversallyUnique {
+    id: string;
 }

@@ -1,9 +1,9 @@
 export class Config {
-    static readonly baseUrl: string = "http://localhost:8080/1.0";
-
-    static getUrl(endpoint: Endpoints) {
+    public static getUrl(endpoint: Endpoints) {
         return this.baseUrl + endpoint;
     }
+
+    private static readonly baseUrl: string = "http://localhost:8080/1.0";
 }
 
 export const enum Endpoints {
@@ -11,5 +11,5 @@ export const enum Endpoints {
     Health = "/health",
     Patterns = "/patterns",
     PatternsHead = "/patterns/head",
-    PatternsHeadPattern = "/patterns/head/pattern"
+    PatternsHeadPattern = "/patterns/head/pattern",
 }

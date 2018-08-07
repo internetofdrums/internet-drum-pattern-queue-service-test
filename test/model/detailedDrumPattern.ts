@@ -1,6 +1,6 @@
-import {UniversallyUnique} from "./universallyUnique";
-import {Named} from "./named";
-import {DrumPatternData} from "./drumPatternData";
+import {IDrumPatternData} from "./drumPatternData";
+import {INamed} from "./named";
+import {IUniversallyUnique} from "./universallyUnique";
 
-export interface DetailedDrumPattern extends UniversallyUnique, Named, DrumPatternData {
+export interface IDetailedDrumPattern extends IUniversallyUnique, INamed, IDrumPatternData {
 }

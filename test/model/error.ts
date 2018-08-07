@@ -1,5 +1,5 @@
-export interface Error {
-    message: string
+export interface IError {
+    message: string;
 }
 
 export enum ErrorMessages {

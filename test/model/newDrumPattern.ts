@@ -1,5 +1,5 @@
-import {Named} from "./named";
-import {DrumPatternData} from "./drumPatternData";
+import {IDrumPatternData} from "./drumPatternData";
+import {INamed} from "./named";
 
-export interface NewDrumPattern extends Named, DrumPatternData {
+export interface INewDrumPattern extends INamed, IDrumPatternData {
 }

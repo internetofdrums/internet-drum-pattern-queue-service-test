@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Functionally tests the HTTP API of the Internet of Drums pattern queue service.",
   "scripts": {
-    "test": "mocha --bail --require ts-node/register test/*.ts"
+    "test": "tslint -c tslint.json 'test/**/*.ts' && tsc -p .",
+    "start": "mocha --bail --require ts-node/register test/*.ts"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "mocha": "5.2.0",
     "node-fetch": "2.2.0",
     "ts-node": "7.0.0",
-    "typescript": "3.0.1"
+    "tslint": "5.11.0",
+    "typescript": "^3.0.1"
   }
 }

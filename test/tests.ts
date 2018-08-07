@@ -1,37 +1,42 @@
+import * as assert from "assert";
+import {before, describe} from "mocha";
+import fetch, {Headers, RequestInit, Response} from "node-fetch";
 import {Config, Endpoints} from "./config/config";
 import {HttpContentType} from "./http/httpContentType";
 import {HttpHeader} from "./http/httpHeader";
 import {HttpMethod} from "./http/httpMethod";
 import {HttpStatusCode} from "./http/httpStatusCode";
-import {NewDrumPattern} from "./model/newDrumPattern";
-import {DrumPatternList} from "./model/drumPatternList";
-import {Error, ErrorMessages} from "./model/error";
-
-import * as assert from "assert";
-import fetch, {Headers, RequestInit, Response} from "node-fetch";
-import {before, describe} from "mocha";
-import {DetailedDrumPattern} from "./model/detailedDrumPattern";
-import {DrumPatternData} from "./model/drumPatternData";
+import {IDetailedDrumPattern} from "./model/detailedDrumPattern";
+import {IDrumPatternData} from "./model/drumPatternData";
+import {IDrumPatternList} from "./model/drumPatternList";
+import {ErrorMessages, IError} from "./model/error";
+import {INewDrumPattern} from "./model/newDrumPattern";
 
 const uuidRegexp: RegExp = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
 
-const newDrumPattern01: NewDrumPattern = {
+const newDrumPattern01: INewDrumPattern = {
     name: "Billie Jean",
-    pattern: "fwAAAH8AAAB/AAAAfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfwAAAAAAAAB/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfwB/AH8AfwB/AH8AfwB/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    pattern: "fwAAAH8AAAB/AAAAfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfwAAAAAAAAB/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAfwB/AH8AfwB/AH8AfwB/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 };
 
-const newDrumPattern02: NewDrumPattern = {
+const newDrumPattern02: INewDrumPattern = {
     name: "A Guy Called Gerald",
-    pattern: "fwAAAH8AAAB/AAAAfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfwAAAAAAAAB/AAAAAAAAAAAAAAAAfwAAfwB/AAB/AAB/AAAAAAAAAAAAAAAAAAAAAAAAf38AAH8AAH8AAAAAfwAAAH8AAAAAAAB/AAAAAAB/AAAAAAAAAH8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH8AAAAAfwAAAAB/f38Af38Af39/fwB/f399"
+    pattern: "fwAAAH8AAAB/AAAAfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfwAAAAAAAAB/AAAAAAAAAAAAAAAAfwAAfwB/AAB/AAB/AAAAAAAAAA" +
+        "AAAAAAAAAAAAAAf38AAH8AAH8AAAAAfwAAAH8AAAAAAAB/AAAAAAB/AAAAAAAAAH8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
+        "AAAAAAAAAAAAH8AAAAAfwAAAAB/f38Af38Af39/fwB/f399",
 };
 
-const newDrumPattern03: NewDrumPattern = {
+const newDrumPattern03: INewDrumPattern = {
     name: "Planet Rock",
-    pattern: "fwAAAAB/AAAAAAAAAAAAAAAAAAB/AAAAAAAAAH8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH8AAAAAAAAAfwAAAH8AfwB/AH9/AH8Af38AfwAAAAAAAAAAAAAAAAAAAAAAfwB/f38Af39/AH9/f39/fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    pattern: "fwAAAAB/AAAAAAAAAAAAAAAAAAB/AAAAAAAAAH8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH8AAAAAAAAAfwAAAH8AfwB/AH9/AH8Af38AfwAAAAAAAAAAAAAAAAAAAAAAfwB/f38Af39/AH9/f" +
+        "39/fwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 };
 
 describe(Endpoints.Root, () => {
-    let url: string = Config.getUrl(Endpoints.Root);
+    const url: string = Config.getUrl(Endpoints.Root);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
@@ -47,8 +52,8 @@ describe(Endpoints.Root, () => {
         });
 
         it("should have a body with error object and description", async () => {
-            let error: Error = {
-                message: ErrorMessages.NotFound
+            const error: IError = {
+                message: ErrorMessages.NotFound,
             };
 
             assert.strictEqual(text, JSON.stringify(error));
@@ -57,7 +62,7 @@ describe(Endpoints.Root, () => {
 });
 
 describe(Endpoints.Health, () => {
-    let url: string = Config.getUrl(Endpoints.Health);
+    const url: string = Config.getUrl(Endpoints.Health);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
@@ -79,7 +84,7 @@ describe(Endpoints.Health, () => {
 });
 
 describe(Endpoints.PatternsHead, () => {
-    let url: string = Config.getUrl(Endpoints.PatternsHead);
+    const url: string = Config.getUrl(Endpoints.PatternsHead);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
@@ -95,8 +100,8 @@ describe(Endpoints.PatternsHead, () => {
         });
 
         it("should have a body with error object and description", async () => {
-            let error: Error = {
-                message: ErrorMessages.QueueEmpty
+            const error: IError = {
+                message: ErrorMessages.QueueEmpty,
             };
 
             assert.strictEqual(text, JSON.stringify(error));
@@ -104,8 +109,8 @@ describe(Endpoints.PatternsHead, () => {
     });
 
     describe(HttpMethod.Delete, () => {
-        let options: RequestInit = {
-            method: HttpMethod.Delete
+        const options: RequestInit = {
+            method: HttpMethod.Delete,
         };
 
         let result: Response;
@@ -121,8 +126,8 @@ describe(Endpoints.PatternsHead, () => {
         });
 
         it("should have a body with error object and description", async () => {
-            let error: Error = {
-                message: ErrorMessages.QueueEmpty
+            const error: IError = {
+                message: ErrorMessages.QueueEmpty,
             };
 
             assert.strictEqual(text, JSON.stringify(error));
@@ -131,7 +136,7 @@ describe(Endpoints.PatternsHead, () => {
 });
 
 describe(Endpoints.PatternsHeadPattern, () => {
-    let url: string = Config.getUrl(Endpoints.PatternsHeadPattern);
+    const url: string = Config.getUrl(Endpoints.PatternsHeadPattern);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
@@ -147,8 +152,8 @@ describe(Endpoints.PatternsHeadPattern, () => {
         });
 
         it("should have a body with error object and description", async () => {
-            let error: Error = {
-                message: ErrorMessages.QueueEmpty
+            const error: IError = {
+                message: ErrorMessages.QueueEmpty,
             };
 
             assert.strictEqual(text, JSON.stringify(error));
@@ -156,8 +161,8 @@ describe(Endpoints.PatternsHeadPattern, () => {
     });
 
     describe(HttpMethod.Delete, () => {
-        let options: RequestInit = {
-            method: HttpMethod.Delete
+        const options: RequestInit = {
+            method: HttpMethod.Delete,
         };
 
         let result: Response;
@@ -173,8 +178,8 @@ describe(Endpoints.PatternsHeadPattern, () => {
         });
 
         it("should have a body with error object and description", async () => {
-            let error: Error = {
-                message: ErrorMessages.QueueEmpty
+            const error: IError = {
+                message: ErrorMessages.QueueEmpty,
             };
 
             assert.strictEqual(text, JSON.stringify(error));
@@ -183,11 +188,11 @@ describe(Endpoints.PatternsHeadPattern, () => {
 });
 
 describe(Endpoints.Patterns, () => {
-    let url: string = Config.getUrl(Endpoints.Patterns);
+    const url: string = Config.getUrl(Endpoints.Patterns);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
-        let drumPatternList: DrumPatternList;
+        let drumPatternList: IDrumPatternList;
 
         before(async () => {
             result = await fetch(url);
@@ -204,16 +209,16 @@ describe(Endpoints.Patterns, () => {
     });
 
     describe(HttpMethod.Post, () => {
-        let headers: Headers = new Headers({
+        const headers: Headers = new Headers({
             name: HttpHeader.ContentType,
-            value: HttpContentType.ApplicationJson
+            value: HttpContentType.ApplicationJson,
         });
 
         describe("offer drum pattern to queue", () => {
-            let options: RequestInit = {
+            const options: RequestInit = {
+                body: JSON.stringify(newDrumPattern01),
+                headers,
                 method: HttpMethod.Post,
-                headers: headers,
-                body: JSON.stringify(newDrumPattern01)
             };
 
             let result: Response;
@@ -228,10 +233,10 @@ describe(Endpoints.Patterns, () => {
         });
 
         describe("offer same drum pattern to queue again", () => {
-            let options: RequestInit = {
+            const options: RequestInit = {
+                body: JSON.stringify(newDrumPattern01),
+                headers,
                 method: HttpMethod.Post,
-                headers: headers,
-                body: JSON.stringify(newDrumPattern01)
             };
 
             let result: Response;
@@ -247,8 +252,8 @@ describe(Endpoints.Patterns, () => {
             });
 
             it("should have a body with error object and description", async () => {
-                let error: Error = {
-                    message: ErrorMessages.PatternAlreadyPresent
+                const error: IError = {
+                    message: ErrorMessages.PatternAlreadyPresent,
                 };
 
                 assert.strictEqual(text, JSON.stringify(error));
@@ -256,10 +261,10 @@ describe(Endpoints.Patterns, () => {
         });
 
         describe("offer another drum pattern to queue", () => {
-            let options: RequestInit = {
+            const options: RequestInit = {
+                body: JSON.stringify(newDrumPattern02),
+                headers,
                 method: HttpMethod.Post,
-                headers: headers,
-                body: JSON.stringify(newDrumPattern02)
             };
 
             let result: Response;
@@ -274,10 +279,10 @@ describe(Endpoints.Patterns, () => {
         });
 
         describe("offer drum pattern to full queue", () => {
-            let options: RequestInit = {
+            const options: RequestInit = {
+                body: JSON.stringify(newDrumPattern03),
+                headers,
                 method: HttpMethod.Post,
-                headers: headers,
-                body: JSON.stringify(newDrumPattern03)
             };
 
             let result: Response;
@@ -293,8 +298,8 @@ describe(Endpoints.Patterns, () => {
             });
 
             it("should have a body with error object and description", async () => {
-                let error: Error = {
-                    message: ErrorMessages.QueueFull
+                const error: IError = {
+                    message: ErrorMessages.QueueFull,
                 };
 
                 assert.strictEqual(text, JSON.stringify(error));
@@ -302,10 +307,10 @@ describe(Endpoints.Patterns, () => {
         });
 
         describe("offer invalid drum pattern to queue", () => {
-            let options: RequestInit = {
+            const options: RequestInit = {
+                body: "{}",
+                headers,
                 method: HttpMethod.Post,
-                headers: headers,
-                body: "{}"
             };
 
             let result: Response;
@@ -321,8 +326,8 @@ describe(Endpoints.Patterns, () => {
             });
 
             it("should have a body with error object and description", async () => {
-                let error: Error = {
-                    message: ErrorMessages.PatternNotParsable
+                const error: IError = {
+                    message: ErrorMessages.PatternNotParsable,
                 };
 
                 assert.strictEqual(text, JSON.stringify(error));
@@ -332,7 +337,7 @@ describe(Endpoints.Patterns, () => {
 
     describe(HttpMethod.Get, () => {
         let result: Response;
-        let drumPatternList: DrumPatternList;
+        let drumPatternList: IDrumPatternList;
 
         before(async () => {
             result = await fetch(url);
@@ -355,11 +360,11 @@ describe(Endpoints.Patterns, () => {
 });
 
 describe(Endpoints.PatternsHead, () => {
-    let url: string = Config.getUrl(Endpoints.PatternsHead);
+    const url: string = Config.getUrl(Endpoints.PatternsHead);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
-        let drumPattern: DetailedDrumPattern;
+        let drumPattern: IDetailedDrumPattern;
 
         before(async () => {
             result = await fetch(url);
@@ -384,12 +389,12 @@ describe(Endpoints.PatternsHead, () => {
     });
 
     describe(HttpMethod.Delete, () => {
-        let options: RequestInit = {
-            method: HttpMethod.Delete
+        const options: RequestInit = {
+            method: HttpMethod.Delete,
         };
 
         let result: Response;
-        let drumPattern: DetailedDrumPattern;
+        let drumPattern: IDetailedDrumPattern;
 
         before(async () => {
             result = await fetch(url, options);
@@ -415,11 +420,11 @@ describe(Endpoints.PatternsHead, () => {
 });
 
 describe(Endpoints.PatternsHeadPattern, () => {
-    let url: string = Config.getUrl(Endpoints.PatternsHead);
+    const url: string = Config.getUrl(Endpoints.PatternsHead);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
-        let drumPattern: DrumPatternData;
+        let drumPattern: IDrumPatternData;
 
         before(async () => {
             result = await fetch(url);
@@ -436,12 +441,12 @@ describe(Endpoints.PatternsHeadPattern, () => {
     });
 
     describe(HttpMethod.Delete, () => {
-        let options: RequestInit = {
-            method: HttpMethod.Delete
+        const options: RequestInit = {
+            method: HttpMethod.Delete,
         };
 
         let result: Response;
-        let drumPattern: DetailedDrumPattern;
+        let drumPattern: IDetailedDrumPattern;
 
         before(async () => {
             result = await fetch(url, options);
@@ -459,11 +464,11 @@ describe(Endpoints.PatternsHeadPattern, () => {
 });
 
 describe(Endpoints.Patterns, () => {
-    let url: string = Config.getUrl(Endpoints.Patterns);
+    const url: string = Config.getUrl(Endpoints.Patterns);
 
     describe(HttpMethod.Get, () => {
         let result: Response;
-        let drumPatternList: DrumPatternList;
+        let drumPatternList: IDrumPatternList;
 
         before(async () => {
             result = await fetch(url);

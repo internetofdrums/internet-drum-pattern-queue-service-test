@@ -1,4 +1,4 @@
-import {ListedDrumPattern} from "./listedDrumPattern";
+import {IListedDrumPattern} from "./listedDrumPattern";
 
-export interface DrumPatternList extends Array<ListedDrumPattern> {
+export interface IDrumPatternList extends Array<IListedDrumPattern> {
 }

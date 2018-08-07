@@ -4,5 +4,5 @@ export enum HttpStatusCode {
     Accepted = 202,
     BadRequest = 400,
     NotFound = 404,
-    UnprocessableEntity = 422
+    UnprocessableEntity = 422,
 }
